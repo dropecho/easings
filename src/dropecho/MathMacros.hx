@@ -11,7 +11,7 @@ class MathMacros {
 	 * Compound arguments (e.g. `1 - t`) are bound to a temporary first so the
 	 * expression is evaluated once instead of `count` times.
 	 */
-	macro static public function pow(value:Expr, count:Int):Expr {
+	public static macro function pow(value:Expr, count:Int):Expr {
 		if (count < 1) {
 			Context.error("MathMacros.pow requires an exponent of at least 1", value.pos);
 		}
