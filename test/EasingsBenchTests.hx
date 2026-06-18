@@ -2,6 +2,7 @@ package;
 
 import utest.Assert;
 import dropecho.Easings;
+import dropecho.MathMacros;
 
 class EasingsBenchTests extends utest.Test {
 	#if (RUN_BENCHMARKS && (sys || nodejs))
@@ -117,6 +118,45 @@ class EasingsBenchTests extends utest.Test {
 		for (i in 0...ITERATIONS)
 			acc += Easings.easeInSine(input(i));
 		report("easeInSine", Sys.cpuTime() - start, acc);
+		Assert.isTrue(acc > 0);
+	}
+
+	// MathMacros.pow vs Math.pow, same exponent — the reason for the macro. The
+	// macro unrolls to repeated multiplication at compile time; Math.pow is a
+	// runtime call that must handle fractional/negative exponents.
+	public function test_m_macroPow2() {
+		var acc = 0.0;
+		var start = Sys.cpuTime();
+		for (i in 0...ITERATIONS)
+			acc += MathMacros.pow(input(i), 2);
+		report("MathMacros.pow(t, 2)", Sys.cpuTime() - start, acc);
+		Assert.isTrue(acc > 0);
+	}
+
+	public function test_n_mathPow2() {
+		var acc = 0.0;
+		var start = Sys.cpuTime();
+		for (i in 0...ITERATIONS)
+			acc += Math.pow(input(i), 2);
+		report("Math.pow(t, 2)", Sys.cpuTime() - start, acc);
+		Assert.isTrue(acc > 0);
+	}
+
+	public function test_o_macroPow5() {
+		var acc = 0.0;
+		var start = Sys.cpuTime();
+		for (i in 0...ITERATIONS)
+			acc += MathMacros.pow(input(i), 5);
+		report("MathMacros.pow(t, 5)", Sys.cpuTime() - start, acc);
+		Assert.isTrue(acc > 0);
+	}
+
+	public function test_p_mathPow5() {
+		var acc = 0.0;
+		var start = Sys.cpuTime();
+		for (i in 0...ITERATIONS)
+			acc += Math.pow(input(i), 5);
+		report("Math.pow(t, 5)", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 

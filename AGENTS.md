@@ -111,3 +111,10 @@ path is **`easeInSine`** at ~5 ns/call (~6–10× the others) because of `Math.c
 is intrinsic to the trig call, not the surrounding code. If a project needs it faster and can
 tolerate approximation error, swap in a polynomial cosine approximation; otherwise leave it,
 as `Math.cos` is the accurate choice and 5 ns is still ~200M calls/sec.
+
+**`MathMacros.pow` vs `Math.pow`** (same exponent, identical results): the macro unrolls to
+repeated multiplication at compile time, so its cost is flat and near the inlining floor
+(~0.5 ns at `^2`, ~0.75 ns at `^5`). `Math.pow` is a runtime call — V8 special-cases `^2`
+(~0.64 ns) but takes the generic `exp(y·log(x))` path for higher integer exponents (~12 ns at
+`^5`). So the macro is ~1.2× faster at `^2` and **~16× faster at `^5`**; the payoff scales with
+the exponent, which is exactly why the `easeIn*`/`easeOut*` polynomial families use it.
