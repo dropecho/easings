@@ -66,48 +66,48 @@ class EasingsBenchTests extends utest.Test {
 		Assert.isTrue(acc > 0);
 	}
 
-	public function test_f_easeIn2() {
+	public function test_f_easeInQuad() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.easeIn2(input(i));
-		report("easeIn2", Sys.cpuTime() - start, acc);
+			acc += Easings.easeInQuad(input(i));
+		report("easeInQuad", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 
-	public function test_g_easeIn5() {
+	public function test_g_easeInQuint() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.easeIn5(input(i));
-		report("easeIn5", Sys.cpuTime() - start, acc);
+			acc += Easings.easeInQuint(input(i));
+		report("easeInQuint", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 
-	public function test_h_easeOut2() {
+	public function test_h_easeOutQuad() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.easeOut2(input(i));
-		report("easeOut2", Sys.cpuTime() - start, acc);
+			acc += Easings.easeOutQuad(input(i));
+		report("easeOutQuad", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 
-	public function test_i_easeOut5() {
+	public function test_i_easeOutQuint() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.easeOut5(input(i));
-		report("easeOut5", Sys.cpuTime() - start, acc);
+			acc += Easings.easeOutQuint(input(i));
+		report("easeOutQuint", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 
-	public function test_j_smoothStep2() {
+	public function test_j_smoothStep() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.smoothStep2(input(i));
-		report("smoothStep2", Sys.cpuTime() - start, acc);
+			acc += Easings.smoothStep(input(i));
+		report("smoothStep", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 
@@ -126,8 +126,8 @@ class EasingsBenchTests extends utest.Test {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
-			acc += Easings.scale(Easings.easeIn2, input(i));
-		report("scale(easeIn2)", Sys.cpuTime() - start, acc);
+			acc += Easings.scale(input(i), Easings.easeInQuad);
+		report("scale(easeInQuad)", Sys.cpuTime() - start, acc);
 		Assert.isTrue(acc > 0);
 	}
 	#end
