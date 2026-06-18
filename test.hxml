@@ -1,0 +1,18 @@
+-cp src
+-cp test
+
+-lib utest
+-lib dropecho.testing
+
+-D analyzer-optimize
+-D analyzer-user-var-fusion
+-w -WDeprecated
+
+--macro include('', true, null, ['src'])
+
+--each
+
+--next
+-lib hxnodejs
+-D js-es=6
+-js artifacts/js_test.cjs

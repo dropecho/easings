@@ -1,0 +1,9 @@
+node_modules/
+artifacts
+*.swp
+.temp
+node_modules
+lang_tests/**/*.dll
+lang_tests/**/*.exe
+dist
+lcov.info

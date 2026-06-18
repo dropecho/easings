@@ -1,0 +1,31 @@
+{
+  "name": "@dropecho/easings",
+  "version": "0.1.0",
+  "description": "A library of easings (linear transformations).",
+  "author": "vantreeseba <vantreeseba@gmail.com>",
+  "repository": "github:dropecho/easings",
+  "main": "dist/js/index.js",
+  "files": [
+    "dist/js/index.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "haxe build.hxml",
+    "test": "haxelib run dropecho.testing",
+    "bench": "haxe test.hxml --main dropecho.testing.AutoTest -D RUN_BENCHMARKS && node artifacts/js_test.cjs"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.0.7",
+    "@semantic-release/npm": "^7.0.5",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "semantic-release": "^17.1.1",
+    "semantic-release-haxelib": "^0.4.0"
+  }
+}

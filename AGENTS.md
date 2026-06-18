@@ -1,0 +1,112 @@
+# AGENTS.md — dropecho.easings
+
+Single source of truth for all AI agents working on this project.
+
+## Agent Instructions
+
+- **Always use the `haxe` skill** when reading or writing any `.hx` or `.hxml` file.
+- **Always use the Haxe LSP** (`LSP` tool) for navigating code — go-to-definition, find references, hover types — before grepping or reading files manually.
+- **Never co-author or co-sign commits.** Do not add `Co-Authored-By` trailers, `Signed-off-by` lines, or any other attribution/sign-off trailers to commit messages.
+
+---
+
+## Project Overview
+
+**dropecho.easings** (`haxelib: dropecho.easings`, npm: `@dropecho/easings`) is a small
+library of easing functions (linear transformations) and math helpers for games and
+animation. It compiles to JS and C#.
+
+- **Version:** 0.1.0
+- **License:** MIT
+- **Targets:** JS (ES6), C# (DLL)
+- **Test runner:** `dropecho.testing` (auto-discovery) over `utest`; `instrument` for coverage
+- **Source root:** `src/`  · **Tests root:** `test/`
+- **Releases:** automated via `semantic-release` (+ `semantic-release-haxelib`)
+
+---
+
+## Source Modules
+
+| Module | Path | Description |
+|---|---|---|
+| `Easings` | `src/dropecho/Easings.hx` | Static easing/interpolation functions: `clamp`, `rangeMap`, `rangeMapClamped`, `mix`/`lerp`, `easeIn2-5`, `easeOut2-5`, `smoothStep2`, `easeInSine`, `scale`. Exposed to JS via `@:expose("easings")` |
+| `MathMacros` | `src/dropecho/MathMacros.hx` | Compile-time macro `pow(value, count)` that unrolls integer powers into repeated multiplication |
+
+All public functions in `Easings` are `static inline`, so calls are inlined at the call
+site. `easeInSine` is the only one with non-trivial cost (it calls `Math.cos`); every
+other ease compiles to a few inlined arithmetic ops (see **Benchmarks**).
+
+---
+
+## Directory Layout
+
+```
+src/dropecho/            # library source
+  Easings.hx             # easing + interpolation functions
+  MathMacros.hx          # build-time math macros (pow)
+test/                    # utest cases, auto-discovered by filename (*Tests.hx)
+  EasingsTests.hx
+  MathMacrosTests.hx
+  EasingsBenchTests.hx   # benchmarks, gated behind -D RUN_BENCHMARKS
+  easings/               # per-function test classes
+    MixTests.hx
+    RangeMapTests.hx
+    RangeMapClampedTests.hx
+.dropecho.testing.json   # test-runner config (coverage, root_package, hxml)
+dist/                    # compiled output (dist/js/index.js, dist/cs/easings)
+artifacts/               # compiled test output + coverage reports
+```
+
+There is no hand-written test main/suite: `dropecho.testing` generates the entry point
+and registers every `*Tests.hx` class on the classpath (note the plural — `Test.hx`
+files are **not** discovered).
+
+---
+
+## Build & Test
+
+Prefer `npm` scripts over invoking Haxe tools directly.
+
+```bash
+# Build (JS ES6 + C# DLL)
+npm run build        # → haxe build.hxml
+
+# Run tests
+npm test             # → haxelib run dropecho.testing
+
+# Run benchmarks (builds with -D RUN_BENCHMARKS, then runs on Node)
+npm run bench
+```
+
+- `build.hxml` builds two targets via `--each`/`--next`: JS to `dist/js/index.js`
+  (`-D js-es=6`, source maps) and C# to `dist/cs/easings` (`-D dll`).
+- `test.hxml` lists libs/targets only — **no `-main`**. The `dropecho.testing` runner
+  injects `--main dropecho.testing.AutoTest` (and instrument/coverage from
+  `.dropecho.testing.json`), then runs each target it finds in the hxml (`-js
+  artifacts/js_test.cjs` on Node).
+- `npm run bench` bypasses the runner and calls `haxe` directly with `-D RUN_BENCHMARKS`
+  so benchmarks build **uninstrumented** for accurate timings.
+
+---
+
+## Key Conventions
+
+- `@:expose("easings")` on the public `Easings` class for the JS bundle
+- Prefer `static inline public` functions for the math/easing helpers
+- Use the `MathMacros.pow` macro instead of `Math.pow` for integer exponents (it unrolls
+  to multiplications and is the basis for the `easeInN`/`easeOutN` families)
+- Tests are `utest` cases: each class is named `*Tests.hx`, `extends utest.Test`, with
+  `test_`-prefixed methods and `utest.Assert` (use `Assert.floatEquals` for floats)
+- Benchmarks live in `EasingsBenchTests.hx` behind `#if (RUN_BENCHMARKS && (sys ||
+  nodejs))`, timed with `Sys.cpuTime()` over tight inlined loops vs. a baseline
+
+---
+
+## Benchmarks
+
+`npm run bench` reports per-call cost for each function (50M iterations, Node). The arithmetic
+eases are all at the inlining floor (~0.5–1 ns/call, i.e. effectively free). The lone hot
+path is **`easeInSine`** at ~5 ns/call (~6–10× the others) because of `Math.cos` — that cost
+is intrinsic to the trig call, not the surrounding code. If a project needs it faster and can
+tolerate approximation error, swap in a polynomial cosine approximation; otherwise leave it,
+as `Math.cos` is the accurate choice and 5 ns is still ~200M calls/sec.
