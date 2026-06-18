@@ -7,6 +7,7 @@ Single source of truth for all AI agents working on this project.
 - **Always use the `haxe` skill** when reading or writing any `.hx` or `.hxml` file.
 - **Always use the Haxe LSP** (`LSP` tool) for navigating code — go-to-definition, find references, hover types — before grepping or reading files manually.
 - **Never co-author or co-sign commits.** Do not add `Co-Authored-By` trailers, `Signed-off-by` lines, or any other attribution/sign-off trailers to commit messages.
+- **Never add section/region divider comments** (e.g. `// ── Foo ──`, `// --- Foo ---`, `#region`). Organize code with ordering and doc comments instead.
 
 ---
 
@@ -29,7 +30,7 @@ animation. It compiles to JS and C#.
 
 | Module | Path | Description |
 |---|---|---|
-| `Easings` | `src/dropecho/Easings.hx` | Static easing/interpolation functions: `clamp`, `rangeMap`, `rangeMapClamped`, `mix`/`lerp`, `easeIn2-5`, `easeOut2-5`, `smoothStep2`, `easeInSine`, `scale`. Exposed to JS via `@:expose("easings")` |
+| `Easings` | `src/dropecho/Easings.hx` | Static easing/interpolation functions: `clamp`, `rangeMap`, `rangeMapClamped`, `mix`/`lerp`, `easeIn{Quad,Cubic,Quart,Quint}`, `easeOut{Quad,Cubic,Quart,Quint}`, `easeInSine`, `smoothStep`, `scale`. Exposed to JS via `@:expose("easings")` |
 | `MathMacros` | `src/dropecho/MathMacros.hx` | Compile-time macro `pow(value, count)` that unrolls integer powers into repeated multiplication |
 
 All public functions in `Easings` are `static inline`, so calls are inlined at the call
@@ -94,7 +95,7 @@ npm run bench
 - `@:expose("easings")` on the public `Easings` class for the JS bundle
 - Prefer `static inline public` functions for the math/easing helpers
 - Use the `MathMacros.pow` macro instead of `Math.pow` for integer exponents (it unrolls
-  to multiplications and is the basis for the `easeInN`/`easeOutN` families)
+  to multiplications and is the basis for the `easeIn*`/`easeOut*` polynomial families)
 - Tests are `utest` cases: each class is named `*Tests.hx`, `extends utest.Test`, with
   `test_`-prefixed methods and `utest.Assert` (use `Assert.floatEquals` for floats)
 - Benchmarks live in `EasingsBenchTests.hx` behind `#if (RUN_BENCHMARKS && (sys ||
