@@ -1,4 +1,5 @@
 -cp src
+-lib dropecho.macros
 --macro include('', true, null, ['src'])
 
 --each

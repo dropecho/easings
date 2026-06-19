@@ -23,6 +23,7 @@ animation. It compiles to JS and C#.
 - **Test runner:** `dropecho.testing` (auto-discovery) over `utest`; `instrument` for coverage
 - **Source root:** `src/`  · **Tests root:** `test/`
 - **Releases:** automated via `semantic-release` (+ `semantic-release-haxelib`)
+- **Dependency:** `dropecho.macros` (provides the compile-time `MathMacros.pow` macro)
 
 ---
 
@@ -31,7 +32,9 @@ animation. It compiles to JS and C#.
 | Module | Path | Description |
 |---|---|---|
 | `Easings` | `src/dropecho/Easings.hx` | Static easing/interpolation functions: `clamp`, `rangeMap`, `rangeMapClamped`, `mix`/`lerp`, `easeIn{Quad,Cubic,Quart,Quint}`, `easeOut{Quad,Cubic,Quart,Quint}`, `easeInSine`, `smoothStep`, `scale`. Exposed to JS via `@:expose("easings")` |
-| `MathMacros` | `src/dropecho/MathMacros.hx` | Compile-time macro `pow(value, count)` that unrolls integer powers into repeated multiplication |
+
+The `pow` macro that the polynomial eases build on now lives in **`dropecho.macros`**
+(`dropecho.macros.MathMacros.pow`); it is pulled in as a dependency.
 
 All public functions in `Easings` are `static inline`, so calls are inlined at the call
 site. `easeInSine` is the only one with non-trivial cost (it calls `Math.cos`); every
@@ -44,10 +47,8 @@ other ease compiles to a few inlined arithmetic ops (see **Benchmarks**).
 ```
 src/dropecho/            # library source
   Easings.hx             # easing + interpolation functions
-  MathMacros.hx          # build-time math macros (pow)
 test/                    # utest cases, auto-discovered by filename (*Tests.hx)
   EasingsTests.hx
-  MathMacrosTests.hx
   EasingsBenchTests.hx   # benchmarks, gated behind -D RUN_BENCHMARKS
   easings/               # per-function test classes
     MixTests.hx
@@ -94,8 +95,9 @@ npm run bench
 
 - `@:expose("easings")` on the public `Easings` class for the JS bundle
 - Prefer `static inline public` functions for the math/easing helpers
-- Use the `MathMacros.pow` macro instead of `Math.pow` for integer exponents (it unrolls
-  to multiplications and is the basis for the `easeIn*`/`easeOut*` polynomial families)
+- Use the `dropecho.macros.MathMacros.pow` macro instead of `Math.pow` for integer
+  exponents (it unrolls to multiplications and is the basis for the `easeIn*`/`easeOut*`
+  polynomial families)
 - Tests are `utest` cases: each class is named `*Tests.hx`, `extends utest.Test`, with
   `test_`-prefixed methods and `utest.Assert` (use `Assert.floatEquals` for floats)
 - Benchmarks live in `EasingsBenchTests.hx` behind `#if (RUN_BENCHMARKS && (sys ||

@@ -3,6 +3,7 @@
 
 -lib utest
 -lib dropecho.testing
+-lib dropecho.macros
 
 -D analyzer-optimize
 -D analyzer-user-var-fusion

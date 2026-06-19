@@ -2,7 +2,7 @@ package;
 
 import utest.Assert;
 import dropecho.Easings;
-import dropecho.MathMacros;
+import dropecho.macros.MathMacros;
 
 class EasingsBenchTests extends utest.Test {
 	#if (RUN_BENCHMARKS && (sys || nodejs))

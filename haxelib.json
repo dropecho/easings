@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "A library of easings (linear transformations).",
   "classPath": "src/",
-  "dependencies": {},
+  "dependencies": {
+    "dropecho.macros": ""
+  },
   "url": "https://github.com/dropecho/easings/",
   "contributors": [
     "vantreeseba"

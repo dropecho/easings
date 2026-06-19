@@ -1,5 +1,7 @@
 package dropecho;
 
+import dropecho.macros.MathMacros;
+
 /**
 A small collection of easing and interpolation helpers.
 
