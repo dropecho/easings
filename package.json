@@ -15,7 +15,7 @@
   "scripts": {
     "install": "lix download",
     "build": "haxe build.hxml",
-    "test": "lix run dropecho.testing",
+    "test": "haxelib run dropecho.testing",
     "bench": "haxe test.hxml --main dropecho.testing.AutoTest -D RUN_BENCHMARKS && node artifacts/js_test.cjs"
   },
   "devDependencies": {
