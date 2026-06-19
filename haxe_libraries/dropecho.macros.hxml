@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/dropecho.macros#1.0.0" into dropecho.macros/1.0.0/haxelib
+-lib tink_macro
+-cp ${HAXE_LIBCACHE}/dropecho.macros/1.0.0/haxelib/src/
+-D dropecho.macros=1.0.0

@@ -70,15 +70,22 @@ files are **not** discovered).
 Prefer `npm` scripts over invoking Haxe tools directly.
 
 ```bash
+# Install/resolve Haxe deps (lix, scoped to haxe_libraries/)
+npm install          # → lix download
+
 # Build (JS ES6 + C# DLL)
 npm run build        # → haxe build.hxml
 
 # Run tests
-npm test             # → haxelib run dropecho.testing
+npm test             # → lix run dropecho.testing
 
 # Run benchmarks (builds with -D RUN_BENCHMARKS, then runs on Node)
 npm run bench
 ```
+
+Dependencies are managed with **lix** (`resolveLibs: scoped` in `.haxerc`); each lib is
+pinned by a lock file in `haxe_libraries/`. `npm install` runs `lix download` to fetch
+them into the lix cache.
 
 - `build.hxml` builds two targets via `--each`/`--next`: JS to `dist/js/index.js`
   (`-D js-es=6`, source maps) and C# to `dist/cs/easings` (`-D dll`).
