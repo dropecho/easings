@@ -162,7 +162,7 @@ class EasingsBenchTests extends utest.Test {
 
 	// scale() takes a function value, so the inner call cannot be inlined — this
 	// measures the dynamic-dispatch cost relative to the inlined eases above.
-	public function test_l_scale() {
+	public function test_q_scale() {
 		var acc = 0.0;
 		var start = Sys.cpuTime();
 		for (i in 0...ITERATIONS)
