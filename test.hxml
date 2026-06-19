@@ -1,6 +1,7 @@
 -cp src
 -cp test
 
+-lib instrument
 -lib utest
 -lib dropecho.testing
 -lib dropecho.macros
