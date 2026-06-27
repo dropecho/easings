@@ -5,7 +5,22 @@ on:
   push:
     branches:
       - main
+
+# Granted to the reusable workflow's jobs. semantic-release needs contents/issues
+# to tag/release; `id-token: write` is required for npm OIDC trusted publishing
+# (must be present on BOTH this caller and the reusable workflow's release job).
+permissions:
+  contents: write
+  issues: write
+  packages: write
+  id-token: write
+
 jobs:
   ci:
     uses: dropecho/.github/.github/workflows/haxe-ci.yml@main
+    permissions:
+      contents: write
+      issues: write
+      packages: write
+      id-token: write
     secrets: inherit

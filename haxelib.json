@@ -10,9 +10,13 @@
   "contributors": [
     "vantreeseba"
   ],
-  "releasenote": "This is a release note",
+  "releasenote": "See CHANGELOG.md for details.",
   "tags": [
-    "example"
+    "easing",
+    "math",
+    "animation",
+    "tween",
+    "interpolation"
   ],
   "license": "MIT"
 }
