@@ -20,5 +20,3 @@
 targets/js.hxml
 --next
 targets/js-esm.hxml
---next
-targets/cs.hxml
