@@ -1,0 +1,7 @@
+# C# (.dll)
+
+-D dll_import
+-D no-root
+-D dll
+
+-cs dist/cs/dropecho.easings

@@ -15,11 +15,11 @@ Single source of truth for all AI agents working on this project.
 
 **dropecho.easings** (`haxelib: dropecho.easings`, npm: `@dropecho/easings`) is a small
 library of easing functions (linear transformations) and math helpers for games and
-animation. It compiles to JS and C#.
+animation. It compiles to JS (CommonJS + ES module) and C#.
 
 - **Version:** 0.1.0
 - **License:** MIT
-- **Targets:** JS (ES6), C# (DLL)
+- **Targets:** JS (CommonJS), JS (ES module + `.d.ts` via genes), C# (DLL)
 - **Test runner:** `dropecho.testing` (auto-discovery) over `utest`; `instrument` for coverage
 - **Source root:** `src/`  · **Tests root:** `test/`
 - **Releases:** automated via `semantic-release` (+ `semantic-release-haxelib`)
@@ -54,8 +54,10 @@ test/                    # utest cases, auto-discovered by filename (*Tests.hx)
     MixTests.hx
     RangeMapTests.hx
     RangeMapClampedTests.hx
+build.hxml               # multi-target build (shared opts + --each/--next)
+targets/                 # one hxml per target (js, js-esm, cs)
 .dropecho.testing.json   # test-runner config (coverage, root_package, hxml)
-dist/                    # compiled output (dist/js/index.js, dist/cs/easings)
+dist/                    # compiled output (js/cjs/index.cjs, js/esm/index.js, cs/dropecho.easings)
 artifacts/               # compiled test output + coverage reports
 ```
 
@@ -73,8 +75,8 @@ Prefer `npm` scripts over invoking Haxe tools directly.
 # Install/resolve Haxe deps (lix, scoped to haxe_libraries/)
 npm install          # → lix download
 
-# Build (JS ES6 + C# DLL)
-npm run build        # → haxe build.hxml
+# Build (JS CommonJS + JS ES module + C# DLL)
+npm run build        # → npm run clean && haxe build.hxml
 
 # Run tests
 npm test             # → lix run dropecho.testing
@@ -87,8 +89,11 @@ Dependencies are managed with **lix** (`resolveLibs: scoped` in `.haxerc`); each
 pinned by a lock file in `haxe_libraries/`. `npm install` runs `lix download` to fetch
 them into the lix cache.
 
-- `build.hxml` builds two targets via `--each`/`--next`: JS to `dist/js/index.js`
-  (`-D js-es=6`, source maps) and C# to `dist/cs/easings` (`-D dll`).
+- `build.hxml` puts shared options (class path, `--macro include`, `-lib dropecho.macros`,
+  `-D analyzer-optimize`) before `--each`, then builds each `targets/*.hxml` separated by
+  `--next`: JS CommonJS to `dist/js/cjs/index.cjs` (`-D js-es=6`, source maps); JS ES module
+  to `dist/js/esm/index.js` (+ `.d.ts` typings via genes); and C# to `dist/cs/dropecho.easings`
+  (`-D dll`).
 - `test.hxml` lists libs/targets only — **no `-main`**. The `dropecho.testing` runner
   injects `--main dropecho.testing.AutoTest` (and instrument/coverage from
   `.dropecho.testing.json`), then runs each target it finds in the hxml (`-js

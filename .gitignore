@@ -7,3 +7,7 @@ lang_tests/**/*.dll
 lang_tests/**/*.exe
 dist
 lcov.info
+.nyc_output
+build
+report
+.vim/
