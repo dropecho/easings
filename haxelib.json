@@ -1,6 +1,6 @@
 {
   "name": "dropecho.easings",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A library of easings (linear transformations).",
   "classPath": "src/",
   "dependencies": {
@@ -10,7 +10,7 @@
   "contributors": [
     "vantreeseba"
   ],
-  "releasenote": "See CHANGELOG.md for details.",
+  "releasenote": "Release version 1.0.0. See CHANGELOG.md for details.",
   "tags": [
     "easing",
     "math",
